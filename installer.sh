@@ -291,11 +291,11 @@ get_IP() {
       systemctl stop nginx
     fi
 
-    nc -l 8080 > /dev/null 2>&1 &
+    nc -l 80 > /dev/null 2>&1 &
     nc_PID=$!
     
      # Check if we can reach the server through it's external IP address
-     if nc -zvw3 $external_ip 8080 > /dev/null 2>&1; then
+     if nc -zvw3 $external_ip 80 > /dev/null 2>&1; then
        INTERNAL_IP=$IP
        IP=$external_ip
      fi
@@ -622,8 +622,8 @@ install_ssl_letsencrypt() {
       cp /etc/nginx/sites-available/bigbluebutton /tmp/bigbluebutton.bak
       cat <<HERE > /etc/nginx/sites-available/bigbluebutton
 server {
-  listen 8080;
-  listen [::]:8080;
+  listen 80;
+  listen [::]:80;
   server_name $HOST;
 
   access_log  /var/log/nginx/bigbluebutton.access.log;
@@ -655,8 +655,8 @@ HERE
 
   cat <<HERE > /etc/nginx/sites-available/bigbluebutton
 server {
-  listen 8080;
-  listen [::]:8080;
+  listen 80;
+  listen [::]:80;
   server_name $HOST;
 
   listen 443 ssl;

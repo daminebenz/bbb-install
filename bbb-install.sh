@@ -291,11 +291,11 @@ get_IP() {
       systemctl stop nginx
     fi
 
-    nc -l 80 > /dev/null 2>&1 &
+    nc -l 8080 > /dev/null 2>&1 &
     nc_PID=$!
     
      # Check if we can reach the server through it's external IP address
-     if nc -zvw3 $external_ip 80 > /dev/null 2>&1; then
+     if nc -zvw3 $external_ip 8080 > /dev/null 2>&1; then
        INTERNAL_IP=$IP
        IP=$external_ip
      fi
@@ -469,7 +469,8 @@ HERE
 
 install_HTML5() {
   if ! apt-key list | grep -q MongoDB; then
-    apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 0C49F3730359A14518585931BC711F9BA15703C6
+    apt-key adv --keyserver hkp://keyserver.ubuntu.com
+    --recv 0C49F3730359A14518585931BC711F9BA15703C6
   fi
 
   echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.4 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-3.4.list
@@ -621,8 +622,8 @@ install_ssl_letsencrypt() {
       cp /etc/nginx/sites-available/bigbluebutton /tmp/bigbluebutton.bak
       cat <<HERE > /etc/nginx/sites-available/bigbluebutton
 server {
-  listen 80;
-  listen [::]:80;
+  listen 8080;
+  listen [::]:8080;
   server_name $HOST;
 
   access_log  /var/log/nginx/bigbluebutton.access.log;
@@ -654,8 +655,8 @@ HERE
 
   cat <<HERE > /etc/nginx/sites-available/bigbluebutton
 server {
-  listen 80;
-  listen [::]:80;
+  listen 8080;
+  listen [::]:8080;
   server_name $HOST;
 
   listen 443 ssl;
